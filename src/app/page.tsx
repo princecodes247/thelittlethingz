@@ -160,8 +160,8 @@ export default function Home() {
               >
                 Time until Valentine&apos;s Day: {timeLeft}
               </motion.div>
-
-              <motion.div 
+              {!showSurprise &&
+              (<motion.div 
                 className="flex gap-4 justify-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -183,8 +183,8 @@ export default function Home() {
                 >
                   Let me think... 🤔
                 </motion.button>
-              </motion.div>
-
+              </motion.div>)
+          }
               {/* <AnimatePresence>
                 {showSurprise && (
                   <motion.div
