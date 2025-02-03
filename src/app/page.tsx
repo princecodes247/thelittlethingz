@@ -1,11 +1,10 @@
 'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import confetti from 'canvas-confetti';
-import MusicPlayer from '@/components/MusicPlayer';
-import LoveLetter from '@/components/LoveLetter';
+import MusicPlayer from '@/components/music-player';
+import LoveLetter from '@/components/love-letter';
 import moment from 'moment';
 
 export default function Home() {

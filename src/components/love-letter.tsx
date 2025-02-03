@@ -14,7 +14,7 @@ export default function LoveLetter() {
     >
       <p className="text-[#333333] text-lg leading-[25px] indent-8">
         Dear love,<br/><br/>
-        Every moment with you feels like a dream come true. Your smile lights up my world, and your love makes every day special. I can't wait to create more beautiful memories together.<br/><br/>
+        Every moment with you feels like a dream come true. Your smile lights up my world, and your love makes every day special. I can&apos;t wait to create more beautiful memories together.<br/><br/>
         Forever yours,<br/>
         [Your Name]
       </p>
