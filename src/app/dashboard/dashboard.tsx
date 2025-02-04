@@ -36,6 +36,7 @@ export default function Dashboard({data}: {data: GetUserValentinesResponse}) {
         alert(result.error || 'Failed to delete valentine');
       }
     } catch (error) {
+      console.log(error)
       alert('Something went wrong while deleting the valentine');
     } finally {
       setIsDeleting(null);
