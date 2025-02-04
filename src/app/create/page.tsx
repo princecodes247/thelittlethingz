@@ -19,7 +19,9 @@ export default function CreateValentine() {
     phoneNumber: '',
     // customUrl: '',
     from: '',
+    customQuestion: '',
   });
+
   const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
@@ -144,6 +146,23 @@ export default function CreateValentine() {
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#A52A2A] focus:border-transparent outline-none"
               placeholder="Your name or leave blank to remain anonymous"
             />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 mb-2 font-lora" htmlFor="customQuestion">
+              Custom Question (optional)
+            </label>
+            <input
+              type="text"
+              id="customQuestion"
+              value={formData.customQuestion}
+              onChange={(e) => setFormData(prev => ({ ...prev, customQuestion: e.target.value }))}
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#A52A2A] focus:border-transparent outline-none"
+              placeholder="e.g., Will you go on a date with me?"
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Default: &quot;Will You Be My Valentine?&quot;
+            </p>
           </div>
 
           <div>

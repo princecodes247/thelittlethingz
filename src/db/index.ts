@@ -39,6 +39,7 @@ const ValentineSchema = createSchema("valentine", {
   message: string().optional(),
   phoneNumber: string().nullable(),
   customUrl: string(),
+  question: string().default("Will You Be My Valentine?"),
   status: literal("pending", "accepted", "rejected").default('pending'),
   creator: objectId(),
   images: array(string()).default([]),

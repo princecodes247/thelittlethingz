@@ -186,8 +186,7 @@ export default function ValentineView({
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                Will You Be My Girlfriend?
-                {/* Will You Be My Valentine? */}
+                {valentine?.question ?? "Will You Be My Valentine?"}
               </motion.h1>
 
               <motion.p 

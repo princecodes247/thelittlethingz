@@ -14,6 +14,7 @@ interface CreateValentineInput {
   message: string;
   phoneNumber?: string;
   customUrl?: string;
+  customQuestion?: string;
 }
 
 function formatCustomUrl(url: string): string {
@@ -40,6 +41,7 @@ export async function createValentine(formData: FormData) {
         from: formData.get("from"),
         message: formData.get("message"),
         phoneNumber: formData.get("phoneNumber"),
+        customQuestion: formData.get("customQuestion"),
     } as CreateValentineInput;
 
     formData.forEach((value, key) => {
@@ -75,6 +77,7 @@ export async function createValentine(formData: FormData) {
       message: rawFormData?.message,
       phoneNumber: rawFormData.phoneNumber || null,
       customUrl,
+      question: rawFormData?.customQuestion && rawFormData?.customQuestion.length > 0 ? rawFormData?.customQuestion : undefined,
       creator: authData?.session?.userId,
       images: result.data.map((file) => file.url)
     });
