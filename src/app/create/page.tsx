@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 // Add to imports
 import { ChangeEvent } from "react";
 import Image from "next/image";
+import { op } from "@/lib/op";
 
 export default function CreateValentine() {
   const router = useRouter();
@@ -51,6 +52,7 @@ export default function CreateValentine() {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    op.track('create-valentine');
 
     const formDataWithFiles = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
