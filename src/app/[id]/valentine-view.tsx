@@ -140,12 +140,12 @@ export default function ValentineView({
                 {storyContent[currentSection].title}
               </motion.h2>
               <motion.div 
-                className="relative w-full min-h-64 rounded-lg overflow-hidden mb-4"
+                className="relative w-full min-h-64 rounded-lg overflow-hidden mb-4 bg-[#A52A2A]/10"
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="relative h-full w-full inset-0 bg-[#A52A2A]/10">
+                <div className="relative h-full w-full inset-0 ">
                 {(storyContent?.[currentSection]?.image && storyContent?.[currentSection]?.image.length > 0) && 
                 <img
                   src={storyContent?.[currentSection]?.image}
