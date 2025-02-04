@@ -6,8 +6,9 @@ import confetti from 'canvas-confetti';
 import MusicPlayer from '@/components/music-player';
 import LoveLetter from '@/components/love-letter';
 import moment from 'moment';
+import { GetValentineResponse } from "@/actions";
 
-export default function Home() {
+export default function ValentineView({valentine}: {valentine: GetValentineResponse["data"]}) {
   const [timeLeft, setTimeLeft] = useState('');
   const [showSurprise, setShowSurprise] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
@@ -62,7 +63,7 @@ export default function Home() {
     }
   };
 
-  const handleYesClick = () => {
+  const handleYesClick = async () => {
     confetti({
       particleCount: 100,
       spread: 70,
@@ -231,11 +232,11 @@ export default function Home() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1 }}
                     >
-                      <LoveLetter />
+                      <LoveLetter text={valentine?.message} from={valentine?.from}/>
                     </motion.div>
 
                     <motion.a
-                      href="https://wa.me/YOUR_PHONE_NUMBER"
+                      href={`https://wa.me/${valentine?.phoneNumber}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-block px-8 py-4 bg-[#25D366] text-white rounded-full hover:bg-[#128C7E] transition-colors text-lg font-lora"

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export default function LoveLetter() {
+export default function LoveLetter({from, text}: {from?: string; text?: string}) {
   return (
     <motion.div 
       initial={{ rotate: -2 }}
@@ -14,9 +14,9 @@ export default function LoveLetter() {
     >
       <p className="text-[#333333] text-lg leading-[25px] indent-8">
         Dear love,<br/><br/>
-        Every moment with you feels like a dream come true. Your smile lights up my world, and your love makes every day special. I can&apos;t wait to create more beautiful memories together.<br/><br/>
+        {text && text.length > 0 ? text : "Every moment with you feels like a dream come true. Your smile lights up my world, and your love makes every day special. I can't wait to create more beautiful memories together."}<br/><br/>
         Forever yours,<br/>
-        [Your Name]
+        {from ?? "XOXO"}
       </p>
     </motion.div>
   );
