@@ -1,4 +1,7 @@
 import { isAuth } from "@/middleware/auth";
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import Dashboard from "./dashboard";
 import { getUserValentines } from "@/actions";
 
