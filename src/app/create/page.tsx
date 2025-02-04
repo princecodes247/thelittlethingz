@@ -4,6 +4,9 @@ import { createValentine } from "@/actions";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+// Add to imports
+import { ChangeEvent } from "react";
+import Image from "next/image";
 
 export default function CreateValentine() {
   const router = useRouter();
@@ -17,14 +20,46 @@ export default function CreateValentine() {
     // customUrl: '',
     from: '',
   });
+  const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (images.length + files.length > 3) {
+      setError('Maximum 3 images allowed');
+      return;
+    }
+
+    const newImages = files.filter(file => file.type.startsWith('image/'));
+    setImages(prev => [...prev, ...newImages]);
+
+    // Create preview URLs
+    const newUrls = newImages.map(file => URL.createObjectURL(file));
+    setImageUrls(prev => [...prev, ...newUrls]);
+  };
+
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+    URL.revokeObjectURL(imageUrls[index]);
+    setImageUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Update handleSubmit to include images
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
+    const formDataWithFiles = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataWithFiles.append(key, value);
+    });
+    images.forEach((image) => {
+      formDataWithFiles.append('files[]', image);
+    });
+
     try {
-      const result = await createValentine(formData);
+      const result = await createValentine(formDataWithFiles);
       
       if (!result.success) {
         setError(result.error || 'Failed to create valentine');
@@ -84,11 +119,12 @@ export default function CreateValentine() {
 
           <div>
             <label className="block text-gray-700 mb-2 font-lora" htmlFor="phone">
-              Your Phone Number (for WhatsApp)
+              Your Phone Number (for WhatsApp, include your country code e.g. +234)
             </label>
             <input
               type="tel"
               id="phone"
+              placeholder="+234xoxo"
               value={formData.phoneNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#A52A2A] focus:border-transparent outline-none"
@@ -136,7 +172,48 @@ export default function CreateValentine() {
               placeholder="e.g., sarah2024"
             />
           </div> */}
-
+        <div>
+            <label className="block text-gray-700 mb-2 font-lora">
+              Upload Images (optional, max 3)
+            </label>
+            <div className="space-y-4">
+              <div className="flex gap-4 flex-wrap">
+                {imageUrls.map((url, index) => (
+                  <div key={url} className="relative w-24 h-24">
+                    <Image
+                      src={url}
+                      alt={`Upload ${index + 1}`}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                    <motion.button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      ×
+                    </motion.button>
+                  </div>
+                ))}
+              </div>
+              {images.length < 3 && (
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-[#A52A2A] file:text-white
+                    hover:file:bg-[#8B0000]"
+                  multiple
+                />
+              )}
+            </div>
+          </div>
           <motion.button
             whileHover={{ scale: isLoading ? 1 : 1.02 }}
             whileTap={{ scale: isLoading ? 1 : 0.98 }}

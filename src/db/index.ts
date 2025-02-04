@@ -41,6 +41,7 @@ const ValentineSchema = createSchema("valentine", {
   customUrl: string(),
   status: literal("pending", "accepted", "rejected").default('pending'),
   creator: objectId(),
+  images: array(string()).default([]),
   views: number().default(0),
   responses: array(object({
     response: string(),

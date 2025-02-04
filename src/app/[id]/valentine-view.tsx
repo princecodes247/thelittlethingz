@@ -26,17 +26,17 @@ export default function ValentineView({
     {
       title: "From the moment we met...",
       content: "Every smile, every laugh we shared became a precious memory.",
-      image: "/first-section.jpg"
+      image: valentine?.images?.[0]
     },
     {
       title: "Through all our adventures...",
       content: "Each moment with you has been magical, making every day special.",
-      image: "/second-section.jpg"
+      image: valentine?.images?.[1]
     },
     {
       title: "And as time went by...",
       content: "My feelings for you grew stronger with each passing day.",
-      image: "/third-section.jpg"
+      image: valentine?.images?.[2]
     }
   ];
 
@@ -140,19 +140,19 @@ export default function ValentineView({
                 {storyContent[currentSection].title}
               </motion.h2>
               <motion.div 
-                className="relative w-full h-64 rounded-lg overflow-hidden mb-4"
+                className="relative w-full min-h-64 rounded-lg overflow-hidden mb-4"
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="absolute inset-0 bg-[#A52A2A]/10">
-               {/* {(storyContent?.[currentSection]?.image && storyContent?.[currentSection]?.image.length > 0) && 
+                <div className="relative h-full w-full inset-0 bg-[#A52A2A]/10">
+                {(storyContent?.[currentSection]?.image && storyContent?.[currentSection]?.image.length > 0) && 
                 <img
                   src={storyContent?.[currentSection]?.image}
                   alt="Our memories"
-                  className="object-cover"
+                  className="max-h-[70vh] object-contain w-full"
                 />
-              } */}
+              }
                 </div>
               </motion.div>
               <motion.p 
@@ -208,7 +208,7 @@ export default function ValentineView({
               </motion.div>
               {!showSurprise &&
               (<motion.div 
-                className="flex gap-4 justify-center"
+                className="flex gap-4 flex-col md:flex-row justify-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}

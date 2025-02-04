@@ -6,6 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function convertToSlug(text: string): string {
+	return text
+		.toLowerCase()
+		.replace(/[^\w\s-]/g, "") // Remove special characters except hyphen and whitespace
+		.replace(/\s+/g, "-") // Replace spaces with hyphens
+		.replace(/--+/g, "-") // Replace consecutive hyphens with a single hyphen
+		.trim(); // Trim leading and trailing spaces
+}
 
 type Serializable = {
   toJSON(): any;

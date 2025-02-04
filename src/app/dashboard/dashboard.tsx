@@ -46,7 +46,7 @@ export default function Dashboard({data}: {data: GetUserValentinesResponse}) {
   return (
     <div className="min-h-screen bg-[#FAF3F0] p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col gap-2 md:flex-row justify-between items-center mb-8">
           <h1 className="text-3xl font-playfair text-[#A52A2A]">My Valentines</h1>
           <Link href="/create">
             <motion.button
@@ -103,7 +103,7 @@ export default function Dashboard({data}: {data: GetUserValentinesResponse}) {
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white p-6 rounded-lg shadow-md"
               >
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2 md:flex-row justify-between md:items-center">
                   <div>
                     <h2 className="text-xl font-lora text-[#333333] mb-2">{valentine.name}</h2>
                     <p className="text-sm text-gray-500">Created: {moment(valentine.createdAt).format('MMMM Do YYYY, h:mm a')}</p>

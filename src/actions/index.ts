@@ -5,8 +5,10 @@ import { serializeValues } from "@/lib/utils";
 import { isAuth } from "@/middleware/auth";
 import { toObjectId } from "monarch-orm";
 import { revalidatePath } from "next/cache";
+import { putFilesInCloudinaryServer } from "./upload.actions";
 
 interface CreateValentineInput {
+  files: File[];
   name: string;
   from?: string;
   message: string;
@@ -24,20 +26,34 @@ function formatCustomUrl(url: string): string {
     .replace(/^-|-$/g, '');   // Remove leading/trailing hyphens
 }
 
-export async function createValentine(data: CreateValentineInput) {
+export async function createValentine(formData: FormData) {
   const authData = await isAuth();
   if (!authData) {
     throw new Error('Unauthorized');
   }
   
   try {
-    let customUrl = data.customUrl 
-      ? formatCustomUrl(data.customUrl)
-      : generateCustomUrl(data.name);
+    const rawFormData = {
+        files: [] as File[],
+        customUrl: formData.get("customUrl"),
+        name: formData.get("name"),
+        from: formData.get("from"),
+        message: formData.get("message"),
+        phoneNumber: formData.get("phoneNumber"),
+    } as CreateValentineInput;
+
+    formData.forEach((value, key) => {
+        if (key === "files[]" && value instanceof File) {
+            rawFormData.files.push(value);
+        }
+    });
+    let customUrl = rawFormData.customUrl 
+      ? formatCustomUrl(rawFormData.customUrl)
+      : generateCustomUrl(rawFormData.name);
 
     // Ensure URL is not empty after sanitization
     if (!customUrl) {
-      customUrl = generateCustomUrl(data.name);
+      customUrl = generateCustomUrl(rawFormData.name);
     }
     
     // Check if custom URL already exists
@@ -49,14 +65,18 @@ export async function createValentine(data: CreateValentineInput) {
       throw new Error('This URL is already taken');
     }
 
-    console.log({authData})
+    const result = await putFilesInCloudinaryServer({
+        files: rawFormData.files ?? [],
+    });
+
     const valentine = await collections.valentine.insertOne({
-      name: data.name,
-      from: data?.from && data?.from.length > 0  ? data?.from : undefined,
-      message: data?.message,
-      phoneNumber: data.phoneNumber || null,
+      name: rawFormData.name,
+      from: rawFormData?.from && rawFormData?.from.length > 0  ? rawFormData?.from : undefined,
+      message: rawFormData?.message,
+      phoneNumber: rawFormData.phoneNumber || null,
       customUrl,
       creator: authData?.session?.userId,
+      images: result.data.map((file) => file.url)
     });
 
     revalidatePath('/dashboard');
