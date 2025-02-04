@@ -82,7 +82,7 @@ export async function createValentine(formData: FormData) {
       images: result.data.map((file) => file.url)
     });
 
-    revalidatePath('/dashboard');
+    // revalidatePath('/dashboard');
     return { success: true, data: serializeValues(valentine) };
 
   } catch (error) {
