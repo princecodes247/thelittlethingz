@@ -163,22 +163,11 @@ export async function getValentine(customUrl: string) {
 }
 export type GetValentineResponse = Awaited<ReturnType<typeof getValentine>>;
 
-export async function getUserValentines() {
-  const authData = await isAuth();
-  if (!authData) {
-    // throw new Error('Unauthorized');
-    return { 
-      success: false, 
-      data: {
-        valentines: [],
-        stats: {}
-      }
-    };
-  }
+export async function getUserValentines(userId: string) {
   try {
 
     const valentines = await collections.valentine.find({
-        creator: toObjectId(authData?.session?.userId),
+        creator: toObjectId(userId),
     }).sort({
       createdAt: -1
     });
