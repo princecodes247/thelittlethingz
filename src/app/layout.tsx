@@ -39,14 +39,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${lora.variable} antialiased`}
       >
+        {children}
+      </body>
          <OpenPanelComponent
-        clientId={process.env.NEXT_PUBLIC_OPEN_PANEL_CLIENT_ID ?? ""}
+        clientId={process.env.NEXT_PUBLIC_OPEN_PANEL_CLIENT_ID!}
         trackScreenViews={true}
         trackAttributes={true}
         trackOutgoingLinks={true}
       />
-        {children}
-      </body>
     </html>
   );
 }
