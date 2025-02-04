@@ -4,9 +4,9 @@ import { auth } from "@/lib/auth";
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-let globalSession: any = null;
+
 export async function isAuth(args?: {invert?:boolean}) {
-    const session = globalSession ?? await auth.api.getSession({ headers: await headers() });
+    const session = await auth.api.getSession({ headers: await headers() });
 
     if(args?.invert && session) return redirect("/user")
 
@@ -16,6 +16,6 @@ export async function isAuth(args?: {invert?:boolean}) {
         return redirect("/login")
     }
 
-    globalSession = session
+    // globalSession = session
     return session;
 }
