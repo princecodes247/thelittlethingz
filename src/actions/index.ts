@@ -95,16 +95,16 @@ export async function createValentine(formData: FormData) {
 }
 
 export async function deleteValentine(valentineId: string) {
+  const authData = await isAuth();
+  if (!authData) {
+    throw new Error('Unauthorized');
+  }
   try {
-    const session = await isAuth();
-    if (!session) {
-      throw new Error('Unauthorized');
-    }
 
     // Find the valentine and verify ownership
     const valentine = await collections.valentine.findOne({
       _id: toObjectId(valentineId),
-      userId: session.userId
+      userId: authData.session.userId
     });
 
     if (!valentine) {
@@ -114,7 +114,7 @@ export async function deleteValentine(valentineId: string) {
     // Delete the valentine
     await collections.valentine.deleteOne({
       _id: toObjectId(valentineId),
-      userId: session.userId
+      userId: authData.session.userId
     });
 
     revalidatePath('/dashboard');
