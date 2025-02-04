@@ -18,8 +18,8 @@ export default function Register() {
   const [passwordError, setPasswordError] = useState('');
 
   const validatePassword = (password: string) => {
-    if (password.length < 6) {
-      return 'Password must be at least 6 characters long';
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long';
     }
     // if (!/[A-Z]/.test(password)) {
     //   return 'Password must contain at least one uppercase letter';
@@ -126,7 +126,7 @@ export default function Register() {
 
             <div>
               <label className="block text-gray-700 mb-2 font-lora" htmlFor="name">
-                Full Name
+                Name
               </label>
               <input
                 type="text"
@@ -181,7 +181,7 @@ export default function Register() {
               <p className="text-gray-500 text-xs mt-2">
                 {/* Password must contain at least 8 characters, including uppercase, lowercase, 
                 number, and special character. */}
-                Password must contain at least 6 characters, and include a number.
+                Password must contain at least 8 characters, and include a number.
               </p>
             </div>
 

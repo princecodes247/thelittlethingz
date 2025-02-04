@@ -7,8 +7,16 @@ import MusicPlayer from '@/components/music-player';
 import LoveLetter from '@/components/love-letter';
 import moment from 'moment';
 import { GetValentineResponse } from "@/actions";
+import { updateValentineResponse } from "@/actions";
+import Link from "next/link";
 
-export default function ValentineView({valentine}: {valentine: GetValentineResponse["data"]}) {
+export default function ValentineView({
+  valentine,
+  preview = false
+}: {
+  valentine: GetValentineResponse["data"];
+  preview?: boolean;
+}) {
   const [timeLeft, setTimeLeft] = useState('');
   const [showSurprise, setShowSurprise] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
@@ -70,8 +78,17 @@ export default function ValentineView({valentine}: {valentine: GetValentineRespo
       origin: { y: 0.6 }
     });
     setShowSurprise(true);
+    if (!preview && valentine) {
+      await updateValentineResponse(valentine?.customUrl, 'accepted');
+    }
   };
 
+  const handleNoClick = async () => {
+    alert("Are you sure? 🥺");
+    if (!preview && valentine) {
+      await updateValentineResponse(valentine.customUrl, 'rejected');
+    }
+  };
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -81,6 +98,27 @@ export default function ValentineView({valentine}: {valentine: GetValentineRespo
 
   return (
     <div className="min-h-screen bg-[#FAF3F0] text-[#333333] flex flex-col items-center justify-center p-8">
+      {preview && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed top-0 left-0 right-0 bg-[#A52A2A] text-white py-2 px-4 text-center z-50 flex items-center justify-between"
+        >
+          <div className="w-20" /> {/* Spacer for centering */}
+          <p className="font-lora">
+            Preview Mode - This is how your valentine will look 💝
+          </p>
+          <Link href="/dashboard">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-1 bg-white text-[#A52A2A] rounded-full text-sm font-lora hover:bg-gray-100"
+            >
+              Back to Dashboard
+            </motion.button>
+          </Link>
+        </motion.div>
+      )}
       <MusicPlayer />
       <main className="max-w-2xl w-full text-center space-y-8">
         <AnimatePresence mode="wait">
@@ -184,7 +222,7 @@ export default function ValentineView({valentine}: {valentine: GetValentineRespo
                   Yes, I will! 💝
                 </motion.button>
                 <motion.button
-                  onClick={() => alert("Are you sure? 🥺")}
+                  onClick={handleNoClick}
                   className="px-8 py-4 bg-[#FFC0CB] text-[#333333] rounded-full hover:bg-[#FFB6C1] transition-colors text-lg font-lora"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

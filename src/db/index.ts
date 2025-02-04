@@ -1,4 +1,4 @@
-import { createClient, createdAt, createDatabase, createSchema, date, literal, number, objectId, string, updatedAt } from "monarch-orm";
+import { array, createClient, createdAt, createDatabase, createSchema, date, literal, number, object, objectId, string, updatedAt } from "monarch-orm";
 
  
 const client = createClient(process.env?.MONGODB_URL ?? 'mongodb://localhost:27017/thelittlethingz')
@@ -42,8 +42,10 @@ const ValentineSchema = createSchema("valentine", {
   status: literal("pending", "accepted", "rejected").default('pending'),
   creator: objectId(),
   views: number().default(0),
-  response: string().nullable().default(null),
-  responseDate: date().nullable().default(null),
+  responses: array(object({
+    response: string(),
+    responseDate: date()
+  })).default([]),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

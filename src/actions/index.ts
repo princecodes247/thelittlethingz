@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 
 interface CreateValentineInput {
   name: string;
+  from?: string;
   message: string;
   phoneNumber?: string;
   customUrl?: string;
@@ -51,15 +52,11 @@ export async function createValentine(data: CreateValentineInput) {
     console.log({authData})
     const valentine = await collections.valentine.insertOne({
       name: data.name,
+      from: data?.from && data?.from.length > 0  ? data?.from : undefined,
       message: data?.message,
       phoneNumber: data.phoneNumber || null,
       customUrl,
       creator: authData?.session?.userId,
-      views: 0,
-      response: null,
-      responseDate: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     revalidatePath('/dashboard');
@@ -165,8 +162,6 @@ export async function getUserValentines() {
 
     const stats = {
       total: valentines.length,
-      accepted: valentines.filter(v => v.response === 'accepted').length,
-      pending: valentines.filter(v => !v.response).length,
       totalViews: valentines.reduce((sum, v) => sum + (v.views || 0), 0)
     };
 
@@ -188,6 +183,42 @@ export async function getUserValentines() {
 }
 
 export type GetUserValentinesResponse = Awaited<ReturnType<typeof getUserValentines>>;
+
+export async function updateValentineResponse(customUrl: string, response: 'accepted' | 'rejected') {
+  try {
+    const valentine = await collections.valentine.findOne({
+      customUrl
+    });
+
+    if (!valentine) {
+      throw new Error('Valentine not found');
+    }
+
+    await collections.valentine.updateOne(
+      { customUrl },
+      { 
+        $push: { 
+          responses: {
+            response,
+            responseDate: new Date()
+          }
+        },
+        $set: {
+          status: response
+        }
+      }
+    );
+
+    return { success: true };
+
+  } catch (error) {
+    console.error('Update Valentine Response Error:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Failed to update response' 
+    };
+  }
+}
 
 function generateCustomUrl(name: string): string {
   const base = name
