@@ -47,6 +47,7 @@ export default function RootLayout({
         trackAttributes={true}
         trackOutgoingLinks={true}
       />
+      <script src="https://analytics.ahrefs.com/analytics.js" data-key="3wfO9R/VJkaEwwVmRQpGVA" async></script>
     </html>
   );
 }
